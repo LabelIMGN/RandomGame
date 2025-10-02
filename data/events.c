@@ -1,4 +1,4 @@
-#include "functions.h"
+#include "types.h"
 
 // Events text and difficulty
 event_t events[] = {
