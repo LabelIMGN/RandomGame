@@ -1,4 +1,8 @@
-#include "functions.c"
+#include "common.h"
+#include "types.h"
+#include "character.h"
+#include "display.h"
+#include "rooms.h"
 
 int main(void){
 
