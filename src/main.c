@@ -41,7 +41,7 @@ int main(void){
         case 1: // Event room
           player = start_event(player, room_count);
           room_count ++;
-          sleep(delay + 2);
+          sleep(delay + 1);
           // getchar();
           break;  
         case 2: // Battle room

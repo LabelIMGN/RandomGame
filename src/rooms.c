@@ -1,9 +1,13 @@
+#include "common.h"
 #include "types.h"
+#include "character.h"
+
+extern event_t events[];
 
 character_t start_encounter(character_t player, int room_count){
 
-  printf("A battle happened. You lost 1 HP\n"); 
-  player.current_hp -= 1;
+  printf("A battle happened. You lost 5 HP\n"); 
+  player.current_hp -= 5;
 
   //Make a enemy that is between player level and player level + room count. 
   //Distribute its points using the distribute_points function
