@@ -58,7 +58,7 @@ int choose_highest_stat(int player_stats[]){
 }
 
 character_t distribute_points(character_t character){
-  int stat_table[6] = {1,1,1,1,1,1}; //Everything at 1 so no stats are at 0
+  int stat_table[NUM_STATS] = {1,1,1,1,1,1}; //Everything at 1 so no stats are at 0
   // 0: Health
   // 1: Mana
   // 2: Strength
@@ -78,7 +78,7 @@ character_t distribute_points(character_t character){
   do{
     current_stat_number = arc4random_uniform(character.stat_max + 1);
     if(character.available_points - current_stat_number >= 0){
-      table_index = arc4random_uniform(6);
+      table_index = arc4random_uniform(NUM_STATS);
       if(current_stat_number > 0 && current_stat_number + stat_table[table_index] <= character.stat_max){
         stat_table[table_index] += current_stat_number;
         character.available_points -= current_stat_number;

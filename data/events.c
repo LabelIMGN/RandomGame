@@ -1,7 +1,8 @@
 #include "types.h"
+#include "rooms.h"
 
 // Events text and difficulty
-event_t events[] = {
+const event_t events[NUM_EVENTS] = {
   {"You enter a room and see a chest locked with a rune.",
   {"You bash it open", "You successfuly reach the lock through the rune", "You dispel the rune", "The gods accept to help you"},
   {"You fail to bash it open", "The rune prevents you from reaching the lock", "You fail to dispel it", "Your prayers go unanswered"},
@@ -27,5 +28,5 @@ event_t events[] = {
   60.0}
 };
 
-
-
+_Static_assert(sizeof(events) / sizeof(events[0]) == NUM_EVENTS,
+               "NUM_EVENTS doesn't match the event count!");

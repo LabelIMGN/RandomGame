@@ -1,13 +1,17 @@
 #include "common.h"
-#include "types.h"
 #include "character.h"
+#include "rooms.h"
 
-extern event_t events[];
+#define POTION_SIZE_SMALL 0
+#define POTION_SIZE_BIG 1
+#define SMALL_POTION_RECOVERY 1
+#define BIG_POTION_RECOVERY 3
 
 character_t start_encounter(character_t player, int room_count){
 
   printf("A battle happened. You lost 5 HP\n"); 
   player.current_hp -= 5;
+  room_count ++; //REMOVE THAT! Just to suppress a warning
 
   //Make a enemy that is between player level and player level + room count. 
   //Distribute its points using the distribute_points function
@@ -29,7 +33,7 @@ character_t start_event(character_t player, int room_count){
   int chosen_stat_index = choose_highest_stat(player_stats);
 
   // Get a random event
-  event_index = arc4random_uniform(4);
+  event_index = arc4random_uniform(NUM_EVENTS);
   
   //Initialize min value for dice roll
   min_value = 100 - events[event_index].difficulty[chosen_stat_index] + 1;
@@ -79,7 +83,6 @@ character_t loot_room(character_t player){
   potion_t potion;
   int potion_type; //0: Health | 1: Mana
   int potion_size; //0: Small | 1: Large
-  int amount_recovered = 0;
   
   potion_type = arc4random_uniform(2);
   potion_size = arc4random_uniform(2);
@@ -96,15 +99,13 @@ character_t loot_room(character_t player){
   switch(potion_type){ // Get the potion type and recover the amount
     case 0: 
       strcpy(potion.type, "health");
-      if(potion_size == 0){
-        player.current_hp += 1;
+      if(potion_size == POTION_SIZE_SMALL){
+        player.current_hp += SMALL_POTION_RECOVERY;
         if(player.current_hp > player.max_hp){
           player.current_hp = player.max_hp;
         }
-        amount_recovered = 1;
-      }else if(potion_size == 1){
-        player.current_hp += 3;
-        amount_recovered = 3;
+      }else if(potion_size == POTION_SIZE_BIG){
+        player.current_hp += BIG_POTION_RECOVERY;
         if(player.current_hp > player.max_hp){
           player.current_hp = player.max_hp;
         }
@@ -117,14 +118,12 @@ character_t loot_room(character_t player){
         if(player.current_mp > player.max_mp){
           player.current_mp = player.max_mp;
         }
-        amount_recovered = 1;
       }else if(potion_size == 1){
         player.current_mp += 3;
         player.current_mp += 1;
         if(player.current_mp > player.max_mp){
           player.current_mp = player.max_mp;
         }
-        amount_recovered = 3;
       }
     break;
     default:
