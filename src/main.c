@@ -52,7 +52,7 @@ int main(void){
           sleep(GAME_SPEED + 1);
           break;  
         case 2: // Battle room
-          player = process_encounters(player, room_count);
+          player = process_encounters(player, player_battle_stats, room_count);
           room_count ++;
           sleep(GAME_SPEED);
           break;

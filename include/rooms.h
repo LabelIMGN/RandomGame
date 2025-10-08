@@ -4,12 +4,16 @@
 #include "types.h"
 
 #define NUM_EVENTS 4
-#define NUM_ENCOUNTERS 4
+#define NUM_ENEMIES 4
 #define NUM_POTION_TYPE 2
 #define NUM_POTION_SIZE 2
+#define POTION_SIZE_SMALL 0
+#define POTION_SIZE_BIG 1
+#define SMALL_POTION_RECOVERY 1
+#define BIG_POTION_RECOVERY 3
 
 extern const event_t events[NUM_EVENTS];
-extern const encounter_t encounters[NUM_ENCOUNTERS];
+extern const encounter_t enemies[NUM_ENEMIES];
 
 /*
  * Generate a random health or mana potion(big or small) for the player to loot 
@@ -35,7 +39,7 @@ character_t loot_room(character_t player);
  * Returns: 
  *   player - With updated HP or MP
  */
-character_t process_encounters(character_t player, int room_count);
+character_t process_encounters(character_t player, int player_battle_stats[], int room_count);
 
 /*
  * Chooses from a set of written event and decide the outcome based on player stats

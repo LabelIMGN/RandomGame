@@ -2,7 +2,6 @@
 #define TYPES_H
 
 #define MAX_NAME_LENGTH 32
-#define NUM_STATS 6
 #define NUM_BATTLE_STATS 4 // str | dex | int | fth
 #define RESISTANCES_MIN -3
 #define RESISTANCES_MAX 3
