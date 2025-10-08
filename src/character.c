@@ -1,6 +1,8 @@
 #include "common.h"
 #include "types.h"
 
+#define MAX_DISTRIBUTE_ITERATIONS 1000000
+
 int set_available_points(int level){
   /*Sets the number of points that will be distributed to the character
    * The assigning function will substract from this pool until empty*/
@@ -37,7 +39,7 @@ int choose_highest_stat(int player_stats[]){
   int highest_stats[4];
 
   // Check highest stat number
-  for(i = 0; i < 4; i++){
+  for(i = 0; i < NUM_BATTLE_STATS; i++){
     if(player_stats[i] > highest_stat_number){
       highest_stat_number = player_stats[i];
     }
@@ -66,7 +68,7 @@ character_t distribute_points(character_t character){
   // 4: Intelligence
   // 5: Faith
 
-  int debug_loop_count;
+  int loop_count;
   int current_stat_number;
   int table_index;
 
@@ -74,7 +76,7 @@ character_t distribute_points(character_t character){
     
   // Find a random number between 1 and stat_max and that won't exceed available_points
   // and assign it to the stat_table
-  debug_loop_count = 1;
+  loop_count = 1;
   do{
     current_stat_number = arc4random_uniform(character.stat_max + 1);
     if(character.available_points - current_stat_number >= 0){
@@ -84,20 +86,22 @@ character_t distribute_points(character_t character){
         character.available_points -= current_stat_number;
       }
     }
-    debug_loop_count ++;
-  }while(character.available_points > 0);
+    loop_count ++;
+  }while(character.available_points > 0 && loop_count < MAX_DISTRIBUTE_ITERATIONS);
   
   // Assign the values to the character's stats
   character.max_hp = stat_table[0] + 10;
   character.max_mp = stat_table[1] + 10;
-  character.strength = stat_table[2];
-  character.dexterity = stat_table[3];
-  character.intelligence = stat_table[4];
-  character.faith = stat_table[5];
+  character.str = stat_table[2];
+  character.dex = stat_table[3];
+  character.mag = stat_table[4];
+  character.fth = stat_table[5];
 
+  #ifdef DEBUG
   printf("----- Stat table values -----\n0: %d\n1: %d\n2: %d\n3: %d\n4: %d\n5: %d\n"
          "", stat_table[0], stat_table[1], stat_table[2], stat_table[3], stat_table[4], stat_table[5]);
-  printf("Loop count: %d\n", debug_loop_count);
+  printf("Loop count: %d\n", loop_count);
+  #endif
 
   return character;
 }

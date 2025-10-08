@@ -3,6 +3,6 @@
 
 #include "types.h"
 
-void display_player(character_t player);
+void display_player(character_t player, int room_count);
 
 #endif

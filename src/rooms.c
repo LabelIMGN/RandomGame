@@ -7,19 +7,14 @@
 #define SMALL_POTION_RECOVERY 1
 #define BIG_POTION_RECOVERY 3
 
-character_t start_encounter(character_t player, int room_count){
+character_t process_encounters(character_t player, int room_count){
 
-  printf("A battle happened. You lost 5 HP\n"); 
-  player.current_hp -= 5;
-  room_count ++; //REMOVE THAT! Just to suppress a warning
-
-  //Make a enemy that is between player level and player level + room count. 
-  //Distribute its points using the distribute_points function
+  character_t enemy = {0};
 
   return player;
 }
 
-character_t start_event(character_t player, int room_count){
+character_t process_event(character_t player, int room_count){
 
   int event_index;
   int min_value;
@@ -29,7 +24,7 @@ character_t start_event(character_t player, int room_count){
   float damage_percentage;
 
   // Get the highest stat
-  int player_stats[4] = {player.strength, player.dexterity, player.intelligence, player.faith};
+  int player_stats[4] = {player.str, player.dex, player.mag, player.fth};
   int chosen_stat_index = choose_highest_stat(player_stats);
 
   // Get a random event
@@ -37,26 +32,34 @@ character_t start_event(character_t player, int room_count){
   
   //Initialize min value for dice roll
   min_value = 100 - events[event_index].difficulty[chosen_stat_index] + 1;
-  // DEBUG
+  
+  #ifdef DEBUG
   printf("DEBUG---\nChosen stat index: %d\nMin value = %d\nDifficulty: %d\n", 
         chosen_stat_index, min_value, events[event_index].difficulty[chosen_stat_index]);
+  #endif
 
   dice_roll = arc4random_uniform(100) + 1;
 
-  printf("DEBUG---\nDice roll before calculations = %d\n", dice_roll);
-  //Augment this number by ln(chosen stat)
+  #ifdef DEBUG
+  printf("Dice roll before calculations = %d\n", dice_roll);
+  #endif
+
   dice_roll += 5*log(player_stats[chosen_stat_index]);
-  //Reduce by ln(room_count)
   dice_roll -= 10*log(room_count + 1);
-  // DEBUG
-  printf("DEBUG---\nDice roll after calculations = %d\n", dice_roll);
+
+  #ifdef DEBUG
+  printf("Dice roll after calculations = %d\n", dice_roll);
+  #endif
+
   // 4 - Compare this value to difficulty, if equal or greater success, else fail
   if(dice_roll >= events[event_index].difficulty[chosen_stat_index]){
     outcome = 0; // Success
   }else{
     outcome = 1; //Failure, compute damage_percentage
     damage_percentage = (arc4random_uniform(events[event_index].max_damage) + 1)/100.0;
-    printf("DEBUG---\nDamage percentage: %f\n", damage_percentage);
+    #ifdef DEBUG
+    printf("Damage percentage: %f\n", damage_percentage);
+    #endif
   }
 
   // Display the event description
@@ -67,8 +70,8 @@ character_t start_event(character_t player, int room_count){
       printf("%s\n", events[event_index].success[chosen_stat_index]);
       break;
     case 1: // Failure
-      damages = player.max_hp * damage_percentage;
-      player.current_hp -= damages;
+      damages = player.max_hp * damage_percentage + room_count * damage_percentage;
+      player.cur_hp -= damages;
       printf("%s. You lost %d HP.\n", events[event_index].failure[chosen_stat_index], damages);
       break;
     default:
@@ -80,14 +83,16 @@ character_t start_event(character_t player, int room_count){
 }
 
 character_t loot_room(character_t player){
+
   potion_t potion;
   int potion_type; //0: Health | 1: Mana
   int potion_size; //0: Small | 1: Large
   
-  potion_type = arc4random_uniform(2);
-  potion_size = arc4random_uniform(2);
+  potion_type = arc4random_uniform(NUM_POTION_TYPE);
+  potion_size = arc4random_uniform(NUM_POTION_SIZE);
 
-  switch(potion_size){ // Get the potion size
+  // Get the potion size
+  switch(potion_size){
     case 0: strcpy(potion.size, "small");
     break;
     case 1: strcpy(potion.size,"large");
@@ -96,33 +101,34 @@ character_t loot_room(character_t player){
     printf("That was no potion...");
     break;
   }
-  switch(potion_type){ // Get the potion type and recover the amount
+  
+  // Get the potion type and recover the amount
+  switch(potion_type){ 
     case 0: 
       strcpy(potion.type, "health");
       if(potion_size == POTION_SIZE_SMALL){
-        player.current_hp += SMALL_POTION_RECOVERY;
-        if(player.current_hp > player.max_hp){
-          player.current_hp = player.max_hp;
+        player.cur_hp += SMALL_POTION_RECOVERY;
+        if(player.cur_hp > player.max_hp){
+          player.cur_hp = player.max_hp;
         }
       }else if(potion_size == POTION_SIZE_BIG){
-        player.current_hp += BIG_POTION_RECOVERY;
-        if(player.current_hp > player.max_hp){
-          player.current_hp = player.max_hp;
+        player.cur_hp += BIG_POTION_RECOVERY;
+        if(player.cur_hp > player.max_hp){
+          player.cur_hp = player.max_hp;
         }
       }
     break;
     case 1: 
       strcpy(potion.type, "mana");
-      if(potion_size == 0){
-        player.current_mp += 1;
-        if(player.current_mp > player.max_mp){
-          player.current_mp = player.max_mp;
+      if(potion_size == POTION_SIZE_SMALL){
+        player.cur_mp += 1;
+        if(player.cur_mp > player.max_mp){
+          player.cur_mp = player.max_mp;
         }
-      }else if(potion_size == 1){
-        player.current_mp += 3;
-        player.current_mp += 1;
-        if(player.current_mp > player.max_mp){
-          player.current_mp = player.max_mp;
+      }else if(potion_size == POTION_SIZE_BIG){
+        player.cur_mp += 3;
+        if(player.cur_mp > player.max_mp){
+          player.cur_mp = player.max_mp;
         }
       }
     break;

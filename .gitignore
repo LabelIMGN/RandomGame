@@ -1,0 +1,23 @@
+# Build artifacts
+obj/
+bin/
+*.o
+*.out
+
+# Executable
+game
+
+# macOS specific
+.DS_Store
+*.dSYM/
+
+# Editor/IDE files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+compile_commands.json
+
+# Debug files
+*.log

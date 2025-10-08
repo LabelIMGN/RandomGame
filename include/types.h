@@ -4,6 +4,8 @@
 #define MAX_NAME_LENGTH 32
 #define NUM_STATS 6
 #define NUM_BATTLE_STATS 4 // str | dex | int | fth
+#define RESISTANCES_MIN -3
+#define RESISTANCES_MAX 3
 
 typedef struct {
   char name[MAX_NAME_LENGTH]; 
@@ -12,26 +14,25 @@ typedef struct {
   int available_points;
   int max_hp;
   int max_mp;
-  int current_hp;
-  int current_mp;
-  int strength;
-  int dexterity;
-  int intelligence;
-  int faith;
-}character_t; //character_struct
+  int cur_hp;
+  int cur_mp;
+  int str;
+  int dex;
+  int mag;
+  int fth;
+}character_t;
 
 typedef struct {
   char *description;
   char *success[NUM_BATTLE_STATS]; // 0: str | 1: dex | 2: int | 3: fth
   char *failure[NUM_BATTLE_STATS]; // 0: str | 1: dex | 2: int | 3: fth
   int difficulty[NUM_BATTLE_STATS]; //Difficulty per stats from 0 to 100, same order 
-  int max_damage; // As a percent of player's max health
+  int max_damage;
 }event_t;
 
 typedef struct{
-  character_t enemy;
-  char *type; // Minion or Boss
-  int count;
+  char *type;
+  int resistances[NUM_BATTLE_STATS]; // Assigned to each stats from RESISTANCES_MIN to RESISTANCES_MAX
 }encounter_t;
 
 typedef struct{
