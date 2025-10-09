@@ -7,7 +7,7 @@ else
 endif
 
 # Compiler flags
-CFLAGS = -Wall -Wextra -I./include -g -DDEBUG
+CFLAGS = -Wall -Wextra -I./include -g 
 LDFLAGS = -lm
 
 # Directories

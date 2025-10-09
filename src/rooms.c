@@ -11,10 +11,13 @@ character_t process_encounters(character_t player, int player_battle_stats[], in
   strcpy(enemy.name, enemies[enemy_index].type);
   // Enemy level is the room count until I find something cooler
   enemy.level = room_count;
+  enemy.available_points = set_available_points(enemy.level);
+  enemy.stat_max = set_max_stat(enemy.level, enemy.available_points);
   enemy = distribute_points(enemy);
   int enemy_battle_stats[NUM_BATTLE_STATS] = {enemy.str, enemy.dex, enemy.mag, enemy.fth};
 
-  printf("You encounter a %s", enemy.name);
+  printf("You encounter a %s\n", enemy.name);
+  sleep(1);
 
   #ifdef DEBUG
   printf("Enemy stats:\nLevel: %d\nstr: %d\ndex: %d\nmag: %d\nfth: %d\n", enemy.level, enemy.str, enemy.dex, enemy.mag, enemy.fth);
@@ -23,15 +26,19 @@ character_t process_encounters(character_t player, int player_battle_stats[], in
 
   for(int i = 0; i < NUM_BATTLE_STATS; i++){
     if(player_battle_stats[i] - enemy_battle_stats[i] < 0){
-      enemy_score += enemies[enemy_index].resistances[i];
+      enemy_score += 1 + enemies[enemy_index].resistances[i];
     }
   }
 
+  #ifdef DEBUG
+  printf("Enemy score: %d\n", enemy_score);
+  #endif
+
   if(enemy_score > 0){
     player.cur_hp -= enemy_score * 2;
-    printf("You fight it and took %d damage", enemy_score * 2);
+    printf("You fight it and take %d damage\n", enemy_score * 2);
   }else{
-    printf("You easily beat it");
+    printf("You easily beat it\n");
   }
 
   return player;

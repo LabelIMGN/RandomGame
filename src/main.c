@@ -5,7 +5,7 @@
 #include "rooms.h"
 
 #define NUM_CHOICE 3
-#define GAME_SPEED 2 // Delay in seconds between loops
+#define GAME_SPEED 1 // Delay in seconds between loops
 
 int main(void){
 
@@ -23,17 +23,23 @@ int main(void){
     room_count = 1;
     player.available_points = set_available_points(player.level);
     player.stat_max = set_max_stat(player.level, player.available_points);
+
+    #ifdef DEBUG
     printf("Level: %d\nStat maximum: %d\nDistributable points: %d\n",
       player.level, player.stat_max, player.available_points);
+
+    #endif
     player = distribute_points(player); 
     int player_battle_stats[NUM_BATTLE_STATS] = {player.str, player.dex, player.mag, player.fth};
 
     do{
       printf("Enter a name for your character: ");
+      scanf("%s", player.name);
       if(strlen(player.name) > MAX_NAME_LENGTH){
         printf("Name is too long. Try again\n");
       }
     }while(strlen(player.name) > MAX_NAME_LENGTH);
+    // system("clear");
 
     player.cur_hp = player.max_hp;
     player.cur_mp = player.max_mp;
