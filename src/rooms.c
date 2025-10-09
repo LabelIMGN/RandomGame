@@ -35,8 +35,8 @@ character_t process_encounters(character_t player, int player_battle_stats[], in
   #endif
 
   if(enemy_score > 0){
-    player.cur_hp -= enemy_score * 2;
-    printf("You fight it and take %d damage\n", enemy_score * 2);
+    player.cur_hp -= enemy_score + enemy.level / 2;
+    printf("You fight it and take %d damage\n", enemy_score + enemy.level / 2);
   }else{
     printf("You easily beat it\n");
   }
@@ -74,6 +74,9 @@ character_t process_event(character_t player, int room_count){
   printf("Dice roll before calculations = %d\n", dice_roll);
   #endif
 
+  // After the dice roll, give a bonus and a malus that scales with the chosen stat and 
+  // difficulty but that accounts for extremely high values using logarithmic scaling.
+  // Values used here were chosen from trial and error
   dice_roll += 5*log(player_stats[chosen_stat_index]);
   dice_roll -= 10*log(room_count + 1);
 
