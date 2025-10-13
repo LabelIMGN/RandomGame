@@ -3,12 +3,15 @@
 #include "rooms.h"
 
 character_t process_encounters(character_t player, int player_battle_stats[], int room_count){
+  // NOTE: player_battle_stats is passed as a copy to allow future modifications without
+  // affecting the original player struct. 
 
   character_t enemy = {0};
   int enemy_score = 0;
   int enemy_index = arc4random_uniform(NUM_ENEMIES);
 
-  strcpy(enemy.name, enemies[enemy_index].type);
+  strncpy(enemy.name, enemies[enemy_index].type, MAX_NAME_LENGTH - 1);
+  enemy.name[MAX_NAME_LENGTH - 1] = '\0';
   // Enemy level is the room count until I find something cooler
   enemy.level = room_count;
   enemy.available_points = set_available_points(enemy.level);
@@ -16,7 +19,7 @@ character_t process_encounters(character_t player, int player_battle_stats[], in
   enemy = distribute_points(enemy);
   int enemy_battle_stats[NUM_BATTLE_STATS] = {enemy.str, enemy.dex, enemy.mag, enemy.fth};
 
-  printf("You encounter a %s\n", enemy.name);
+  printf("You encounter a level %d %s\n", enemy.level, enemy.name);
   sleep(1);
 
   #ifdef DEBUG
@@ -47,7 +50,6 @@ character_t process_encounters(character_t player, int player_battle_stats[], in
 character_t process_event(character_t player, int room_count){
 
   int event_index;
-  int min_value;
   int dice_roll; // Between difficulty level and 100 (arc4random(max - min + 1) + min)
   int outcome; // 0: Success | 1: Failure
   int damages;
@@ -60,12 +62,10 @@ character_t process_event(character_t player, int room_count){
   // Get a random event
   event_index = arc4random_uniform(NUM_EVENTS);
   
-  //Initialize min value for dice roll
-  min_value = 100 - events[event_index].difficulty[chosen_stat_index] + 1;
   
   #ifdef DEBUG
-  printf("DEBUG---\nChosen stat index: %d\nMin value = %d\nDifficulty: %d\n", 
-        chosen_stat_index, min_value, events[event_index].difficulty[chosen_stat_index]);
+  printf("DEBUG---\nChosen stat index: %d\nDifficulty: %d\n", 
+        chosen_stat_index , events[event_index].difficulty[chosen_stat_index]);
   #endif
 
   dice_roll = arc4random_uniform(100) + 1;

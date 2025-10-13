@@ -34,6 +34,7 @@ character_t loot_room(character_t player);
  *
  * Parameters:
  *   player - The current player struct
+ *   player_battle_stats[] - For comparaison. Passed as an array for future fexibility
  *   room_count - The number of rooms the player cleared
  *
  * Returns: 

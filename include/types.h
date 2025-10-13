@@ -1,7 +1,7 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#define MAX_NAME_LENGTH 32
+#define MAX_NAME_LENGTH 32 // DONT FORGET TO ADJUST THE NAME INPUT IN MAIN IF YOU CHANGE THIS!
 #define NUM_BATTLE_STATS 4 // str | dex | int | fth
 #define RESISTANCES_MIN -3
 #define RESISTANCES_MAX 3

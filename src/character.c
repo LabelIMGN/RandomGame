@@ -36,7 +36,7 @@ int choose_highest_stat(int player_stats[]){
   int random_pick;
   int highest_stat_number = 1; // Baseline to go through all stats
   int stat_added_count = 0; // Used for the random highest stat choice if more than one exists  
-  int highest_stats[4];
+  int highest_stats[NUM_BATTLE_STATS];
 
   // Check highest stat number
   for(i = 0; i < NUM_BATTLE_STATS; i++){

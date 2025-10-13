@@ -4,7 +4,7 @@
 // Events text and difficulty
 const event_t events[NUM_EVENTS] = {
   {"You enter a room and see a chest locked with a rune.",
-  {"You bash it open", "You successfuly reach the lock through the rune", "You dispel the rune", "The gods accept to help you"},
+  {"You bash it open", "You successfully reach the lock through the rune", "You dispel the rune", "The gods accept to help you"},
   {"You fail to bash it open", "The rune prevents you from reaching the lock", "You fail to dispel it", "Your prayers go unanswered"},
   {75, 70, 20, 40},
   10.0},
@@ -17,7 +17,7 @@ const event_t events[NUM_EVENTS] = {
 
   {"An unfamiliar pentagram is drawn in blood on the wall in front of you.",
   {"You forceefully break the wall", "You scrape it off with your dagger", "You activate it", "You banish it with a prayer"},
-  {"You can't break it", "The blood won't srape off", "You activate it and get blasted", "It reacts violently"},
+  {"You can't break it", "The blood won't scrape off", "You activate it and get blasted", "It reacts violently"},
   {85, 75, 15, 10},
   30.0},
 
