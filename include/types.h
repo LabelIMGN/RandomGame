@@ -5,10 +5,14 @@
 #define NUM_BATTLE_STATS 4 // str | dex | int | fth
 #define RESISTANCES_MIN -3
 #define RESISTANCES_MAX 3
+#define XP_GAIN_MODIFIER 5
+#define LEVEL_REQ_MODIFIER 8
 
 typedef struct {
   char name[MAX_NAME_LENGTH]; 
   int level;
+  int cur_xp_pool;
+  int next_level_threshold;
   int stat_max;
   int available_points;
   int max_hp;

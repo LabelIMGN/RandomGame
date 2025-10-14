@@ -13,11 +13,22 @@ int main(void){
   int room_choice;//0: Loot room | 1: Event room | 2: Battle room
   int room_count;
 
-  // Character initial setup
-  printf("What level are you?: ");
-  scanf("%d", &player.level); // Temporary
+  player.level = 1;
+  #ifdef DEBUG
+  printf("Enter starting level\n");
+  scanf("%d", &player.level);
   getchar();
+  #endif
 
+  do{
+    printf("Enter a name for your character: ");
+    scanf("%31s", player.name); //CHANGE THIS IF YOU CHANGE MAX_NAME_LENGTH
+    if(strlen(player.name) > MAX_NAME_LENGTH){
+      printf("Name is too long. Try again\n");
+    }
+  }while(strlen(player.name) > MAX_NAME_LENGTH);
+  getchar();
+  
   //Game loop
   while(1){
     room_count = 0;
@@ -27,22 +38,13 @@ int main(void){
     #ifdef DEBUG
     printf("Level: %d\nStat maximum: %d\nDistributable points: %d\n",
       player.level, player.stat_max, player.available_points);
-
     #endif
     player = distribute_points(player); 
     int player_battle_stats[NUM_BATTLE_STATS] = {player.str, player.dex, player.mag, player.fth};
 
-    do{
-      printf("Enter a name for your character: ");
-      scanf("31%s", player.name); //CHANGE THIS IF YOU CHANGE MAX_NAME_LENGTH
-      if(strlen(player.name) > MAX_NAME_LENGTH){
-        printf("Name is too long. Try again\n");
-      }
-    }while(strlen(player.name) > MAX_NAME_LENGTH);
-    // system("clear");
-
     player.cur_hp = player.max_hp;
     player.cur_mp = player.max_mp;
+
     do{
       room_count ++;
       display_player(player, room_count);
@@ -54,7 +56,7 @@ int main(void){
           break;
         case 1: // Event room
           player = process_event(player, room_count);
-          sleep(GAME_SPEED + 1);
+          sleep(GAME_SPEED);
           break;  
         case 2: // Battle room
           player = process_encounters(player, player_battle_stats, room_count);
@@ -67,6 +69,9 @@ int main(void){
 
     //Player is dead. Ready for a new run
     printf("You died after visiting %d rooms\n", room_count);
+    // Leveling part and waiting for the user to press Enter
+    player = level_up(player, room_count);
+    printf("You will get reborn at level %d\nPress Enter when ready...\n", player.level);
     getchar();
   }
 

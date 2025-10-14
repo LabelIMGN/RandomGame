@@ -88,7 +88,7 @@ character_t distribute_points(character_t character){
   
   // Assign the values to the character's stats
   character.max_hp = 10 + character.level;
-  character.max_mp = 1 + (character.level % 2);
+  character.max_mp = 1 + character.level / 2;
   character.str = stat_table[0];
   character.dex = stat_table[1];
   character.mag = stat_table[2];
@@ -101,4 +101,28 @@ character_t distribute_points(character_t character){
   #endif
 
   return character;
+}
+
+character_t level_up(character_t player, int room_count){
+
+  player.next_level_threshold = player.level * LEVEL_REQ_MODIFIER;
+  player.cur_xp_pool += room_count * XP_GAIN_MODIFIER;
+
+  while(player.cur_xp_pool >= player.next_level_threshold){
+
+    #ifdef DEBUG
+    printf("Level up threshold: %d\nCurrent xp: %d\n", player.next_level_threshold, player.cur_xp_pool);
+    #endif
+
+    player.level ++;
+    player.cur_xp_pool -= player.next_level_threshold;
+    player.next_level_threshold = player.level * LEVEL_REQ_MODIFIER;
+
+  }
+
+  #ifdef DEBUG
+  printf("Current xp after level up process: %d\n", player.cur_xp_pool);
+  #endif
+
+  return player;
 }
