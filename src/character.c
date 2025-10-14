@@ -1,7 +1,7 @@
 #include "common.h"
 #include "types.h"
 
-#define MAX_DISTRIBUTE_ITERATIONS 1000000
+#define MAX_DISTRIBUTE_ITERATIONS 10000000
 
 int set_available_points(int level){
   /*Sets the number of points that will be distributed to the character
@@ -21,6 +21,7 @@ int set_available_points(int level){
 }
 
 int set_max_stat(int level, int available_points){
+  // All values here are from trial and error
   if(level <= 10){
     return 15;
   }else if(level <= 60){

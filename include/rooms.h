@@ -11,6 +11,9 @@
 #define POTION_SIZE_BIG 1
 #define SMALL_POTION_RECOVERY 1
 #define BIG_POTION_RECOVERY 3
+#define ROOM_TEXT_SPEED 1
+#define DICE_ROLL_BONUS_MODIFIER 5
+#define DICE_ROLL_MALUS_MODIFIER 10
 
 extern const event_t events[NUM_EVENTS];
 extern const encounter_t enemies[NUM_ENEMIES];

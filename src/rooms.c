@@ -20,7 +20,7 @@ character_t process_encounters(character_t player, int player_battle_stats[], in
   int enemy_battle_stats[NUM_BATTLE_STATS] = {enemy.str, enemy.dex, enemy.mag, enemy.fth};
 
   printf("You encounter a level %d %s\n", enemy.level, enemy.name);
-  sleep(1);
+  sleep(ROOM_TEXT_SPEED);
 
   #ifdef DEBUG
   printf("Enemy stats:\nLevel: %d\nstr: %d\ndex: %d\nmag: %d\nfth: %d\n", enemy.level, enemy.str, enemy.dex, enemy.mag, enemy.fth);
@@ -76,9 +76,9 @@ character_t process_event(character_t player, int room_count){
 
   // After the dice roll, give a bonus and a malus that scales with the chosen stat and 
   // difficulty but that accounts for extremely high values using logarithmic scaling.
-  // Values used here were chosen from trial and error
-  dice_roll += 5*log(player_stats[chosen_stat_index]);
-  dice_roll -= 10*log(room_count + 1);
+  // Modifiers used here are from trial and error and can be adjusted freely
+  dice_roll += DICE_ROLL_BONUS_MODIFIER*log(player_stats[chosen_stat_index]);
+  dice_roll -= DICE_ROLL_MALUS_MODIFIER*log(room_count + 1);
 
   #ifdef DEBUG
   printf("Dice roll after calculations = %d\n", dice_roll);
@@ -97,7 +97,7 @@ character_t process_event(character_t player, int room_count){
 
   // Display the event description
   printf("%s\n", events[event_index].description);
-  sleep(1);
+  sleep(ROOM_TEXT_SPEED);
   switch(outcome){
     case 0: // Success
       printf("%s\n", events[event_index].success[chosen_stat_index]);
