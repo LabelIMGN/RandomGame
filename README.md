@@ -1,6 +1,6 @@
 # Terminal Dungeon Crawler
 
-A roguelike dungeon crawler game built in C for the terminal. Progress through randomly-generated rooms, face skill checks, find loot, and battle enemies until you meet your demise. Each death reveals how far you made it, and you can start over with a new character that will innherit the experience of the previous one.
+A roguelike dungeon crawler game built in C for the terminal. Progress through randomly-generated rooms, face skill checks, find loot, and battle enemies until you meet your demise. Each death reveals how far you made it, and you can start over with a reborn character that accumulates experience with eah run.
 
 ## Features
 
@@ -8,8 +8,8 @@ A roguelike dungeon crawler game built in C for the terminal. Progress through r
 - **Three room types**:
   - Loot rooms with health/mana potions
   - Event rooms with skill-based challenges
-  - Battle encounters (in development)
-- **Scaling difficulty** - Events become harder as you progress deeper into the dungeon
+  - Battle encounters
+- **Scaling difficulty** - Events and battles become harder as you progress deeper into the dungeon
 - **Stat-based skill checks** - Your highest stat is automatically used to attempt events
 
 ## Building the Project
