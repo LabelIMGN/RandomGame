@@ -10,6 +10,7 @@ game
 # macOS specific
 .DS_Store
 *.dSYM/
+.cache/
 
 # Editor/IDE files
 *.swp
