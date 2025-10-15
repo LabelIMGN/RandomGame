@@ -1,6 +1,6 @@
 # Terminal Dungeon Crawler
 
-A roguelike dungeon crawler game built in C for the terminal. Progress through randomly-generated rooms, face skill checks, find loot, and battle enemies until you meet your demise. Each death reveals how far you made it, and you can start over with a reborn character that accumulates experience with eah run.
+A roguelike dungeon crawler game built in C for the terminal. Progress through randomly-generated rooms, face skill checks, find loot, and battle enemies until you meet your demise. Each death reveals how far you made it, and you can start over with a reborn character that accumulates experience with each run.
 
 ## Features
 
