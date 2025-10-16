@@ -4,7 +4,7 @@
 #include "types.h"
 
 #define NUM_EVENTS 4
-#define NUM_ENEMIES 4
+#define NUM_ENEMIES 5
 #define NUM_POTION_TYPE 2
 #define NUM_POTION_SIZE 2
 #define POTION_SIZE_SMALL 0
