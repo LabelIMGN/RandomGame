@@ -2,13 +2,12 @@
 #include "character.h"
 #include "rooms.h"
 
-character_t process_encounters(character_t player, int player_battle_stats[], int room_count){
-  // NOTE: player_battle_stats is passed as a copy to allow future modifications without
-  // affecting the original player struct. 
+void process_encounters(character_t *player, int room_count){
 
   character_t enemy = {0};
   int enemy_score = 0;
   int enemy_index = arc4random_uniform(NUM_ENEMIES);
+  int player_battle_stats[NUM_BATTLE_STATS] = {player->str, player->dex, player->mag, player->fth};
 
   strncpy(enemy.name, enemies[enemy_index].type, MAX_NAME_LENGTH - 1);
   enemy.name[MAX_NAME_LENGTH - 1] = '\0';
@@ -38,16 +37,15 @@ character_t process_encounters(character_t player, int player_battle_stats[], in
   #endif
 
   if(enemy_score > 0){
-    player.cur_hp -= enemy_score + enemy.level / 2;
+    player->cur_hp -= enemy_score + enemy.level / 2;
     printf("You fight it and take %d damage\n", enemy_score + enemy.level / 2);
   }else{
     printf("You easily beat it\n");
   }
 
-  return player;
 }
 
-character_t process_event(character_t player, int room_count){
+void process_event(character_t *player, int room_count){
 
   int event_index;
   int dice_roll; // Between difficulty level and 100 (arc4random(max - min + 1) + min)
@@ -56,7 +54,7 @@ character_t process_event(character_t player, int room_count){
   float damage_percentage;
 
   // Get the highest stat
-  int player_stats[NUM_BATTLE_STATS] = {player.str, player.dex, player.mag, player.fth};
+  int player_stats[NUM_BATTLE_STATS] = {player->str, player->dex, player->mag, player->fth};
   int chosen_stat_index = choose_highest_stat(player_stats);
 
   // Get a random event
@@ -103,19 +101,17 @@ character_t process_event(character_t player, int room_count){
       printf("%s\n", events[event_index].success[chosen_stat_index]);
       break;
     case 1: // Failure
-      damages = player.max_hp * damage_percentage + room_count * damage_percentage;
-      player.cur_hp -= damages;
+      damages = player->max_hp * damage_percentage + room_count * damage_percentage;
+      player->cur_hp -= damages;
       printf("%s. You lost %d HP.\n", events[event_index].failure[chosen_stat_index], damages);
       break;
     default:
       printf("Error occured. Skipping event");
   }
 
-  return player;
-
 }
 
-character_t loot_room(character_t player){
+void loot_room(character_t *player){
 
   potion_t potion;
   int potion_type; //0: Health | 1: Mana
@@ -140,28 +136,28 @@ character_t loot_room(character_t player){
     case 0: 
       strcpy(potion.type, "health");
       if(potion_size == POTION_SIZE_SMALL){
-        player.cur_hp += SMALL_POTION_RECOVERY;
-        if(player.cur_hp > player.max_hp){
-          player.cur_hp = player.max_hp;
+        player->cur_hp += SMALL_POTION_RECOVERY;
+        if(player->cur_hp > player->max_hp){
+          player->cur_hp = player->max_hp;
         }
       }else if(potion_size == POTION_SIZE_BIG){
-        player.cur_hp += BIG_POTION_RECOVERY;
-        if(player.cur_hp > player.max_hp){
-          player.cur_hp = player.max_hp;
+        player->cur_hp += BIG_POTION_RECOVERY;
+        if(player->cur_hp > player->max_hp){
+          player->cur_hp = player->max_hp;
         }
       }
     break;
     case 1: 
       strcpy(potion.type, "mana");
       if(potion_size == POTION_SIZE_SMALL){
-        player.cur_mp += 1;
-        if(player.cur_mp > player.max_mp){
-          player.cur_mp = player.max_mp;
+        player->cur_mp += 1;
+        if(player->cur_mp > player->max_mp){
+          player->cur_mp = player->max_mp;
         }
       }else if(potion_size == POTION_SIZE_BIG){
-        player.cur_mp += 3;
-        if(player.cur_mp > player.max_mp){
-          player.cur_mp = player.max_mp;
+        player->cur_mp += 3;
+        if(player->cur_mp > player->max_mp){
+          player->cur_mp = player->max_mp;
         }
       }
     break;
@@ -171,7 +167,5 @@ character_t loot_room(character_t player){
   }
 
   printf("You found a %s %s potion\n", potion.size, potion.type);
-
-  return player;
 
 }

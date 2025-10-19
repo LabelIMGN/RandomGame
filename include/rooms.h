@@ -28,7 +28,7 @@ extern const encounter_t enemies[NUM_ENEMIES];
  * Returns: 
  *   player - With updated HP or MP
  */
-character_t loot_room(character_t player);
+void loot_room(character_t *player);
 
 /*
  * Generate an enemy with randomly generated battle stats 
@@ -43,7 +43,7 @@ character_t loot_room(character_t player);
  * Returns: 
  *   player - With updated HP or MP
  */
-character_t process_encounters(character_t player, int player_battle_stats[], int room_count);
+void process_encounters(character_t *player, int room_count);
 
 /*
  * Chooses from a set of written event and decide the outcome based on player stats
@@ -56,6 +56,6 @@ character_t process_encounters(character_t player, int player_battle_stats[], in
  * Returns: 
  *   player - With updated stats
  */
-character_t process_event(character_t player, int room_count);
+void process_event(character_t *player, int room_count);
 
 #endif

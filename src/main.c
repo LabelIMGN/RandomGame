@@ -40,7 +40,6 @@ int main(void){
       player.level, player.stat_max, player.available_points);
     #endif
     player = distribute_points(player); 
-    int player_battle_stats[NUM_BATTLE_STATS] = {player.str, player.dex, player.mag, player.fth};
 
     player.cur_hp = player.max_hp;
     player.cur_mp = player.max_mp;
@@ -51,15 +50,15 @@ int main(void){
       room_choice = arc4random_uniform(NUM_CHOICE);
       switch(room_choice){
         case 0: // Loot room
-          player = loot_room(player);
+          loot_room(&player);
           sleep(GAME_SPEED);
           break;
         case 1: // Event room
-          player = process_event(player, room_count);
+          process_event(&player, room_count);
           sleep(GAME_SPEED);
           break;  
         case 2: // Battle room
-          player = process_encounters(player, player_battle_stats, room_count);
+          process_encounters(&player, room_count);
           sleep(GAME_SPEED);
           break;
         default:
