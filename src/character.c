@@ -3,31 +3,28 @@
 
 #define MAX_DISTRIBUTE_ITERATIONS 10000000
 
-int set_available_points(int level){
+void set_available_points(character_t *character){
   /*Sets the number of points that will be distributed to the character
    * The assigning function will substract from this pool until empty*/
 
-  int available_points;
-
-  if(level < 10){
-  available_points = level;
-  }else if(level < 60){
-    available_points = level + 1;
+  if(character->level < 10){
+  character->available_points = character->level;
+  }else if(character->level < 60){
+    character->available_points = character->level + 1;
   }else{
-    available_points = level + 2;
+    character->available_points = character->level + 2;
   }
 
-  return available_points;
 }
 
-int set_max_stat(int level, int available_points){
+void set_max_stat(character_t *player){
   // All values here are from trial and error
-  if(level <= 10){
-    return 15;
-  }else if(level <= 60){
-    return (available_points / 3);
+  if(player->level <= 10){
+    player->stat_max = 15;
+  }else if(player->level <= 60){
+    player->stat_max = player->available_points / 3;
   }else{
-    return available_points / 2;
+    player->stat_max = player->available_points / 2;
   }
 }
 
@@ -47,7 +44,7 @@ int choose_highest_stat(int player_stats[]){
   }
 
   // Make a table of the stats matching the highest stat number
-  for(i = 0; i < 4; i++){
+  for(i = 0; i < NUM_BATTLE_STATS; i++){
     if(player_stats[i] == highest_stat_number){
       highest_stats[stat_added_count] = i;
       stat_added_count ++;
@@ -60,7 +57,7 @@ int choose_highest_stat(int player_stats[]){
 
 }
 
-character_t distribute_points(character_t character){
+void distribute_points(character_t *character){
   int stat_table[NUM_BATTLE_STATS] = {1,1,1,1}; //Everything at 1 so no stats are at 0
   // 0: Strength
   // 1: Dexterity
@@ -77,23 +74,23 @@ character_t distribute_points(character_t character){
   // and assign it to the stat_table
   do{
     loop_count ++;
-    current_stat_number = arc4random_uniform(character.stat_max + 1);
-    if(character.available_points - current_stat_number >= 0){
+    current_stat_number = arc4random_uniform(character->stat_max + 1);
+    if(character->available_points - current_stat_number >= 0){
       table_index = arc4random_uniform(NUM_BATTLE_STATS);
-      if(current_stat_number > 0 && current_stat_number + stat_table[table_index] <= character.stat_max){
+      if(current_stat_number > 0 && current_stat_number + stat_table[table_index] <= character->stat_max){
         stat_table[table_index] += current_stat_number;
-        character.available_points -= current_stat_number;
+        character->available_points -= current_stat_number;
       }
     }
-  }while(character.available_points > 0 && loop_count < MAX_DISTRIBUTE_ITERATIONS);
+  }while(character->available_points > 0 && loop_count < MAX_DISTRIBUTE_ITERATIONS);
   
   // Assign the values to the character's stats
-  character.max_hp = 10 + character.level;
-  character.max_mp = 1 + character.level / 2;
-  character.str = stat_table[0];
-  character.dex = stat_table[1];
-  character.mag = stat_table[2];
-  character.fth = stat_table[3];
+  character->max_hp = 10 + character->level;
+  character->max_mp = 1 + character->level / 2;
+  character->str = stat_table[0];
+  character->dex = stat_table[1];
+  character->mag = stat_table[2];
+  character->fth = stat_table[3];
 
   #ifdef DEBUG
   printf("----- Stat table values -----\n0: %d\n1: %d\n2: %d\n3: %d\n4:"
@@ -101,29 +98,27 @@ character_t distribute_points(character_t character){
   printf("Loop count: %d\n", loop_count);
   #endif
 
-  return character;
 }
 
-character_t level_up(character_t player, int room_count){
+void level_up(character_t *player, int room_count){
 
-  player.next_level_threshold = player.level * LEVEL_REQ_MODIFIER;
-  player.cur_xp_pool += room_count * XP_GAIN_MODIFIER;
+  player->next_level_threshold = player->level * LEVEL_REQ_MODIFIER;
+  player->cur_xp_pool += room_count * XP_GAIN_MODIFIER;
 
-  while(player.cur_xp_pool >= player.next_level_threshold){
+  while(player->cur_xp_pool >= player->next_level_threshold){
 
     #ifdef DEBUG
-    printf("Level up threshold: %d\nCurrent xp: %d\n", player.next_level_threshold, player.cur_xp_pool);
+    printf("Level up threshold: %d\nCurrent xp: %d\n", player->next_level_threshold, player->cur_xp_pool);
     #endif
 
-    player.level ++;
-    player.cur_xp_pool -= player.next_level_threshold;
-    player.next_level_threshold = player.level * LEVEL_REQ_MODIFIER;
+    player->level ++;
+    player->cur_xp_pool -= player->next_level_threshold;
+    player->next_level_threshold = player->level * LEVEL_REQ_MODIFIER;
 
   }
 
   #ifdef DEBUG
-  printf("Current xp after level up process: %d\n", player.cur_xp_pool);
+  printf("Current xp after level up process: %d\n", player->cur_xp_pool);
   #endif
 
-  return player;
 }

@@ -7,15 +7,15 @@ void process_encounters(character_t *player, int room_count){
   character_t enemy = {0};
   int enemy_score = 0;
   int enemy_index = arc4random_uniform(NUM_ENEMIES);
-  int player_battle_stats[NUM_BATTLE_STATS] = {player->str, player->dex, player->mag, player->fth};
 
   strncpy(enemy.name, enemies[enemy_index].type, MAX_NAME_LENGTH - 1);
   enemy.name[MAX_NAME_LENGTH - 1] = '\0';
   // Enemy level is the room count until I find something cooler
   enemy.level = room_count;
-  enemy.available_points = set_available_points(enemy.level);
-  enemy.stat_max = set_max_stat(enemy.level, enemy.available_points);
-  enemy = distribute_points(enemy);
+  set_available_points(&enemy);
+  set_max_stat(&enemy);
+  distribute_points(&enemy);
+  int player_battle_stats[NUM_BATTLE_STATS] = {player->str, player->dex, player->mag, player->fth};
   int enemy_battle_stats[NUM_BATTLE_STATS] = {enemy.str, enemy.dex, enemy.mag, enemy.fth};
 
   printf("You encounter a level %d %s\n", enemy.level, enemy.name);
@@ -59,7 +59,6 @@ void process_event(character_t *player, int room_count){
 
   // Get a random event
   event_index = arc4random_uniform(NUM_EVENTS);
-  
   
   #ifdef DEBUG
   printf("DEBUG---\nChosen stat index: %d\nDifficulty: %d\n", 

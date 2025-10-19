@@ -5,7 +5,7 @@
 #define NUM_BATTLE_STATS 4 // str | dex | int | fth
 #define RESISTANCES_MIN -3
 #define RESISTANCES_MAX 3
-#define XP_GAIN_MODIFIER 5
+#define XP_GAIN_MODIFIER 10
 #define LEVEL_REQ_MODIFIER 8
 
 typedef struct {

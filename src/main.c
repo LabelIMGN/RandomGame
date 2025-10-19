@@ -32,21 +32,21 @@ int main(void){
   //Game loop
   while(1){
     room_count = 0;
-    player.available_points = set_available_points(player.level);
-    player.stat_max = set_max_stat(player.level, player.available_points);
+    set_available_points(&player);
+    set_max_stat(&player);
 
     #ifdef DEBUG
     printf("Level: %d\nStat maximum: %d\nDistributable points: %d\n",
       player.level, player.stat_max, player.available_points);
     #endif
-    player = distribute_points(player); 
+    distribute_points(&player); 
 
     player.cur_hp = player.max_hp;
     player.cur_mp = player.max_mp;
 
     do{
       room_count ++;
-      display_player(player, room_count);
+      display_player(&player, room_count);
       room_choice = arc4random_uniform(NUM_CHOICE);
       switch(room_choice){
         case 0: // Loot room
@@ -56,7 +56,7 @@ int main(void){
         case 1: // Event room
           process_event(&player, room_count);
           sleep(GAME_SPEED);
-          break;  
+          break;
         case 2: // Battle room
           process_encounters(&player, room_count);
           sleep(GAME_SPEED);
@@ -69,7 +69,7 @@ int main(void){
     //Player is dead. Ready for a new run
     printf("You died after visiting %d rooms\n", room_count);
     // Leveling part and waiting for the user to press Enter
-    player = level_up(player, room_count);
+    level_up(&player, room_count);
     printf("You will get reborn at level %d\nPress Enter when ready...\n", player.level);
     getchar();
   }
