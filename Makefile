@@ -7,8 +7,8 @@ else
 endif
 
 # Compiler flags
-CFLAGS = -Wall -Wextra -I./include -g 
-LDFLAGS = -lm
+CFLAGS = -Wall -Wextra -I./include -g -DDEBUG
+LDFLAGS = -lm -lncurses
 
 # Directories
 SRC_DIR = src

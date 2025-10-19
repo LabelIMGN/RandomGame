@@ -68,7 +68,6 @@ int main(void){
 
     //Player is dead. Ready for a new run
     printf("You died after visiting %d rooms\n", room_count);
-    // Leveling part and waiting for the user to press Enter
     level_up(&player, room_count);
     printf("You will get reborn at level %d\nPress Enter when ready...\n", player.level);
     getchar();
