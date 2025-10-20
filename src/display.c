@@ -1,4 +1,6 @@
-#include "common.h"
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "types.h"
 
 void display_player(character_t *player, int room_count){
