@@ -1,4 +1,3 @@
-#include "common.h"
 #include "types.h"
 
 #define MAX_DISTRIBUTE_ITERATIONS 10000000

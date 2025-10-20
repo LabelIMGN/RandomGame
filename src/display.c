@@ -1,7 +1,10 @@
 #include <ncurses.h>
-#include "common.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "types.h"
 
+#define NUM_DISPLAY_STAT NUM_BATTLE_STATS + 2
 #define BOX_EXT_PADDING 1
 #define BOX_INT_PADDING 1
 
@@ -43,7 +46,9 @@ void update_player_display(character_t *player){
   wrefresh(stat_box);
 
   // STATS
-  mvwprintw(stat_box, height + BOX_INT_PADDING, BOX_INT_PADDING, "Test stat");
+  for(int i = 0; i < NUM_DISPLAY_STAT; i++){
+    mvwprintw(stat_box, BOX_INT_PADDING + 1 + 2*i, BOX_INT_PADDING, "Test stat");
+  }
   wrefresh(stat_box);
 
   getch();

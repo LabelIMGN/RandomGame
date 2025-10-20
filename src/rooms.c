@@ -1,4 +1,3 @@
-#include "common.h"
 #include "character.h"
 #include "rooms.h"
 

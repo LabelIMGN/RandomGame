@@ -1,4 +1,3 @@
-#include "common.h"
 #include "types.h"
 #include "character.h"
 #include "display.h"
