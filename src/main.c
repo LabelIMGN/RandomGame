@@ -50,7 +50,7 @@ int main(void){
 
     do{
       room_count ++;
-      display_player(&player, room_count);
+      update_player_display(&player);
       room_choice = arc4random_uniform(NUM_CHOICE);
       switch(room_choice){
         case 0: // Loot room
