@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "types.h"
 
 #define MAX_DISTRIBUTE_ITERATIONS 10000000

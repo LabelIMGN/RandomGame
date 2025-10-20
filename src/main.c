@@ -1,3 +1,8 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
 #include "types.h"
 #include "character.h"
 #include "display.h"
@@ -45,7 +50,7 @@ int main(void){
 
     do{
       room_count ++;
-      update_player_display(&player);
+      display_player(&player, room_count);
       room_choice = arc4random_uniform(NUM_CHOICE);
       switch(room_choice){
         case 0: // Loot room
@@ -67,6 +72,7 @@ int main(void){
 
     //Player is dead. Ready for a new run
     printf("You died after visiting %d rooms\n", room_count);
+    // Leveling part and waiting for the user to press Enter
     level_up(&player, room_count);
     printf("You will get reborn at level %d\nPress Enter when ready...\n", player.level);
     getchar();
