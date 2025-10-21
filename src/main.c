@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <ncurses.h>
 
 #include "types.h"
 #include "character.h"
@@ -13,6 +14,22 @@
 
 int main(void){
 
+  initscr(); // ncurses starts
+  noecho();
+  cbreak();
+  curs_set(0);
+  start_color();
+
+  // COLORS
+  init_pair(10, COLOR_BLACK, COLOR_WHITE); // Name of the player
+  init_pair(11, COLOR_WHITE, COLOR_BLACK); // Player level
+  init_pair(12, COLOR_RED, COLOR_BLACK); // HP
+  init_pair(13, COLOR_CYAN, COLOR_BLACK); // MP
+  init_pair(1, COLOR_MAGENTA, COLOR_BLACK); // str
+  init_pair(2, COLOR_GREEN, COLOR_BLACK); // dex
+  init_pair(3, COLOR_BLUE, COLOR_BLACK); // mag
+  init_pair(4, COLOR_YELLOW, COLOR_BLACK); // fth
+  
   character_t player = {0};
   int room_choice;//0: Loot room | 1: Event room | 2: Battle room
   int room_count;
@@ -35,6 +52,8 @@ int main(void){
   
   //Game loop
   while(1){
+    clear();
+
     room_count = 0;
     set_available_points(&player);
     set_max_stat(&player);
@@ -78,5 +97,6 @@ int main(void){
     getchar();
   }
 
+  endwin(); // ncurses ends
   return 0;
 }
