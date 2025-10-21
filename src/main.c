@@ -47,6 +47,10 @@ int main(void){
 
     player.cur_hp = player.max_hp;
     player.cur_mp = player.max_mp;
+    player.battle_stat[0] = player.str;
+    player.battle_stat[1] = player.dex;
+    player.battle_stat[2] = player.mag;
+    player.battle_stat[3] = player.fth;
 
     do{
       room_count ++;

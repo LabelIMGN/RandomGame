@@ -23,6 +23,7 @@ typedef struct {
   int dex;
   int mag;
   int fth;
+  int battle_stat[NUM_BATTLE_STATS];
 }character_t;
 
 typedef struct {
