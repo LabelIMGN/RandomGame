@@ -62,12 +62,13 @@ void update_player_display(character_t *player){
 
   // STATS
   int i;
-  char *player_stat_names[NUM_BATTLE_STATS] = {"Strength:", "Dexterity:", "Magic:", "Faith:"};
+  char *player_stat_names[NUM_BATTLE_STATS] = {"Strength", "Dexterity", "Magic", "Faith"};
 
   // stat names display
   for(i = 0; i < NUM_BATTLE_STATS; i++){
   wattron(stat_box, COLOR_PAIR(i+1));
-  mvwprintw(stat_box, res_box_height + 3 + STAT_V_SPACING_MULT*i, BOX_INT_H_PADDING, "%s", player_stat_names[i]);
+  mvwprintw(stat_box, res_box_height + 3 + STAT_V_SPACING_MULT*i, BOX_INT_H_PADDING,
+            "%s: %d", player_stat_names[i], player->battle_stat[i]);
   wattroff(stat_box, COLOR_PAIR(i+1));
   }
   wrefresh(stat_box);

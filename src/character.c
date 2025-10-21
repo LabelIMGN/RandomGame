@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ncurses.h>
 
 #include "types.h"
 
@@ -95,9 +96,9 @@ void distribute_points(character_t *character){
   character->fth = stat_table[3];
 
   #ifdef DEBUG
-  printf("----- Stat table values -----\n0: %d\n1: %d\n2: %d\n3: %d\n4:"
+  printw("----- Stat table values -----\n0: %d\n1: %d\n2: %d\n3: %d\n4:"
          "", stat_table[0], stat_table[1], stat_table[2], stat_table[3]);
-  printf("Loop count: %d\n", loop_count);
+  printw("Loop count: %d\n", loop_count);
   #endif
 
 }
@@ -110,7 +111,7 @@ void level_up(character_t *player, int room_count){
   while(player->cur_xp_pool >= player->next_level_threshold){
 
     #ifdef DEBUG
-    printf("Level up threshold: %d\nCurrent xp: %d\n", player->next_level_threshold, player->cur_xp_pool);
+    printw("Level up threshold: %d\nCurrent xp: %d\n", player->next_level_threshold, player->cur_xp_pool);
     #endif
 
     player->level ++;
@@ -120,7 +121,8 @@ void level_up(character_t *player, int room_count){
   }
 
   #ifdef DEBUG
-  printf("Current xp after level up process: %d\n", player->cur_xp_pool);
+  printw("Current xp after level up process: %d\n", player->cur_xp_pool);
+  getch();
   #endif
 
 }

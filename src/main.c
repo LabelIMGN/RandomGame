@@ -15,7 +15,7 @@
 int main(void){
 
   initscr(); // ncurses starts
-  noecho();
+  echo();
   cbreak();
   curs_set(0);
   start_color();
@@ -36,19 +36,16 @@ int main(void){
 
   player.level = 1;
   #ifdef DEBUG
-  printf("Enter starting level\n");
-  scanf("%d", &player.level);
-  getchar();
+  printw("DEBUG Enter starting level: ");
+  // scanf("%d", &player.level);
+  char input[10];
+  getnstr(input, sizeof(input) - 1);
+  player.level = atoi(input);
   #endif
 
-  do{
-    printf("Enter a name for your character: ");
-    scanf("%31s", player.name); //CHANGE THIS IF YOU CHANGE MAX_NAME_LENGTH
-    if(strlen(player.name) > MAX_NAME_LENGTH){
-      printf("Name is too long. Try again\n");
-    }
-  }while(strlen(player.name) > MAX_NAME_LENGTH);
-  getchar();
+  printw("Enter a name for your character: ");
+  getnstr(player.name, MAX_NAME_LENGTH);
+  refresh();
   
   //Game loop
   while(1){
@@ -59,8 +56,9 @@ int main(void){
     set_max_stat(&player);
 
     #ifdef DEBUG
-    printf("Level: %d\nStat maximum: %d\nDistributable points: %d\n",
+    printw("Level: %d\nStat maximum: %d\nDistributable points: %d\n",
       player.level, player.stat_max, player.available_points);
+    getch();
     #endif
     distribute_points(&player); 
 

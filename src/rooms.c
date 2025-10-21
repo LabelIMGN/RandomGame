@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <math.h>
+#include <ncurses.h>
 
 #include "character.h"
 #include "rooms.h"
@@ -27,8 +28,7 @@ void process_encounters(character_t *player, int room_count){
   sleep(ROOM_TEXT_SPEED);
 
   #ifdef DEBUG
-  printf("Enemy stats:\nLevel: %d\nstr: %d\ndex: %d\nmag: %d\nfth: %d\n", enemy.level, enemy.str, enemy.dex, enemy.mag, enemy.fth);
-  getchar();
+  printw("Enemy stats:\nLevel: %d\nstr: %d\ndex: %d\nmag: %d\nfth: %d\n", enemy.level, enemy.str, enemy.dex, enemy.mag, enemy.fth);
   #endif
 
   for(int i = 0; i < NUM_BATTLE_STATS; i++){
@@ -38,7 +38,8 @@ void process_encounters(character_t *player, int room_count){
   }
 
   #ifdef DEBUG
-  printf("Enemy score: %d\n", enemy_score);
+  printw("Enemy score: %d\n", enemy_score);
+  getch();
   #endif
 
   if(enemy_score > 0){
@@ -66,14 +67,14 @@ void process_event(character_t *player, int room_count){
   event_index = arc4random_uniform(NUM_EVENTS);
   
   #ifdef DEBUG
-  printf("DEBUG---\nChosen stat index: %d\nDifficulty: %d\n", 
+  printw("DEBUG---\nChosen stat index: %d\nDifficulty: %d\n", 
         chosen_stat_index , events[event_index].difficulty[chosen_stat_index]);
   #endif
 
   dice_roll = arc4random_uniform(100) + 1;
 
   #ifdef DEBUG
-  printf("Dice roll before calculations = %d\n", dice_roll);
+  printw("Dice roll before calculations = %d\n", dice_roll);
   #endif
 
   // After the dice roll, give a bonus and a malus that scales with the chosen stat and 
@@ -83,7 +84,7 @@ void process_event(character_t *player, int room_count){
   dice_roll -= DICE_ROLL_MALUS_MODIFIER*log(room_count + 1);
 
   #ifdef DEBUG
-  printf("Dice roll after calculations = %d\n", dice_roll);
+  printw("Dice roll after calculations = %d\n", dice_roll);
   #endif
 
   // 4 - Compare this value to difficulty, if equal or greater success, else fail
@@ -93,7 +94,8 @@ void process_event(character_t *player, int room_count){
     outcome = 1; //Failure, compute damage_percentage
     damage_percentage = (arc4random_uniform(events[event_index].max_damage) + 1)/100.0;
     #ifdef DEBUG
-    printf("Damage percentage: %f\n", damage_percentage);
+    printw("Damage percentage: %f\n", damage_percentage);
+    getch();
     #endif
   }
 
