@@ -10,7 +10,6 @@
 #include "rooms.h"
 
 #define NUM_CHOICE 3
-#define GAME_SPEED 1 // Delay in seconds between loops
 
 int main(void){
 
@@ -49,7 +48,6 @@ int main(void){
   
   //Game loop
   while(1){
-    clear();
 
     room_count = 0;
     set_available_points(&player);
@@ -72,19 +70,17 @@ int main(void){
     do{
       room_count ++;
       update_player_display(&player);
+      update_text_box(0, "You enter the next room", NULL, 0);
       room_choice = arc4random_uniform(NUM_CHOICE);
       switch(room_choice){
         case 0: // Loot room
           loot_room(&player);
-          sleep(GAME_SPEED);
           break;
         case 1: // Event room
           process_event(&player, room_count);
-          sleep(GAME_SPEED);
           break;
         case 2: // Battle room
           process_encounters(&player, room_count);
-          sleep(GAME_SPEED);
           break;
         default:
           break;

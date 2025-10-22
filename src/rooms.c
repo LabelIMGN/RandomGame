@@ -5,6 +5,7 @@
 #include <math.h>
 #include <ncurses.h>
 
+#include "display.h"
 #include "character.h"
 #include "rooms.h"
 
@@ -25,7 +26,7 @@ void process_encounters(character_t *player, int room_count){
   int enemy_battle_stats[NUM_BATTLE_STATS] = {enemy.str, enemy.dex, enemy.mag, enemy.fth};
 
   printf("You encounter a level %d %s\n", enemy.level, enemy.name);
-  sleep(ROOM_TEXT_SPEED);
+  napms(1000); // Placeholder
 
   #ifdef DEBUG
   printw("Enemy stats:\nLevel: %d\nstr: %d\ndex: %d\nmag: %d\nfth: %d\n", enemy.level, enemy.str, enemy.dex, enemy.mag, enemy.fth);
@@ -57,6 +58,7 @@ void process_event(character_t *player, int room_count){
   int dice_roll; // Between difficulty level and 100 (arc4random(max - min + 1) + min)
   int outcome; // 0: Success | 1: Failure
   int damages;
+  int room_type = 2; // Roomt type "Event" for display function
   float damage_percentage;
 
   // Get the highest stat
@@ -100,19 +102,22 @@ void process_event(character_t *player, int room_count){
   }
 
   // Display the event description
-  printf("%s\n", events[event_index].description);
-  sleep(ROOM_TEXT_SPEED);
+  // printf("%s\n", events[event_index].description);
   switch(outcome){
     case 0: // Success
-      printf("%s\n", events[event_index].success[chosen_stat_index]);
+      update_text_box(room_type, events[event_index].description, 
+                          events[event_index].success[chosen_stat_index],
+                          -1);
       break;
     case 1: // Failure
       damages = player->max_hp * damage_percentage + room_count * damage_percentage;
       player->cur_hp -= damages;
-      printf("%s. You lost %d HP.\n", events[event_index].failure[chosen_stat_index], damages);
+      update_text_box(room_type, events[event_index].description, 
+                          events[event_index].failure[chosen_stat_index],
+                          damages);
       break;
     default:
-      printf("Error occured. Skipping event");
+      printw("Error occured. Skipping event");
   }
 
 }
@@ -129,12 +134,12 @@ void loot_room(character_t *player){
   // Get the potion size
   switch(potion_size){
     case 0: strcpy(potion.size, "small");
-    break;
+      break;
     case 1: strcpy(potion.size,"large");
-    break;
+      break;
     default:
     printf("That was no potion...");
-    break;
+      break;
   }
   
   // Get the potion type and recover the amount
