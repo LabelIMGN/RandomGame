@@ -18,6 +18,10 @@
 #define EVENT_TYPE 2
 #define BATTLE_TYPE 3
 
+static WINDOW *text_box = NULL;
+static WINDOW *word_wrap_window = NULL;
+static int msg_count = 0;
+
 void update_player_display(character_t *player){
   // BOX SIZING
   // stat box
@@ -110,42 +114,46 @@ void update_text_box(int room_type, char *event, char *outcome, int damages){
   brc = ACS_LRCORNER;
 
   // DRAWING
-  WINDOW *text_box = newwin(text_box_height, text_box_width, start_y, start_x);
-  WINDOW *word_wrap_window = derwin(text_box, text_box_height - 2, text_box_width - 4, 1, 2);
-  wborder(text_box, left, right, top, bottom, tlc, trc, blc, brc);
-  static messages[20][256];
-  static int msg_count;
+  if(text_box == NULL){
+    text_box = newwin(text_box_height, text_box_width, start_y, start_x);
+    word_wrap_window = derwin(text_box, text_box_height - 2, text_box_width - 4, 1, 2);
+  }
 
   switch(room_type){
-    case 0: // New room messsage
+    case 0: // Status message(intro, game over, level up)
+      wclear(word_wrap_window);
       msg_count = 0;
-      mvwprintw(word_wrap_window, 0, 0, event);
+      mvwprintw(word_wrap_window, msg_count*TEXT_SPACING, 0, event);
       msg_count ++;
       break;
     case 1: // Loot room
+      printw("Loot room placeholder");
       break;
     case 2: // Event room
       mvwprintw(word_wrap_window, msg_count*TEXT_SPACING, 0, event);
-      wrefresh(word_wrap_window);
-      wrefresh(text_box);
-      napms(GAME_SPEED);
-      if(damages == -1){ // Positive outcome or loot room
-        mvwprintw(word_wrap_window, 2, 0, outcome);
-        msg_count ++;
+      msg_count ++;
+      if(damages == -1 && outcome != NULL){ // Positive outcome
+        mvwprintw(word_wrap_window, msg_count*TEXT_SPACING, 0, outcome);
       }
       else{
-        mvwprintw(word_wrap_window, msg_count*TEXT_SPACING, 0, outcome);
+        if(outcome != NULL){
+          mvwprintw(word_wrap_window, msg_count*TEXT_SPACING, 0, outcome);
+        }
         msg_count ++;
-        mvwprintw(word_wrap_window, msg_count*TEXT_SPACING , 0, "You loose %d HP.", damages);
+        mvwprintw(word_wrap_window, msg_count*TEXT_SPACING , 0, "You loose %d HP", damages);
       }
       break;
     case 3: // Battle room
       break;
   }
 
+  wborder(text_box, left, right, top, bottom, tlc, trc, blc, brc);
   wrefresh(word_wrap_window);
   wrefresh(text_box);
   getch();
-  // delwin(word_wrap_window);
-  // delwin(text_box);
+}
+
+void cleanup_text_box(void){
+  if(word_wrap_window) delwin(word_wrap_window);
+  if(text_box) delwin(text_box);
 }

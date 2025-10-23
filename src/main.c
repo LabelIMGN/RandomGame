@@ -85,6 +85,7 @@ int main(void){
         default:
           break;
       }
+      // cleanup_text_box();
     }while(player.cur_hp > 0);
 
     //Player is dead. Ready for a new run
