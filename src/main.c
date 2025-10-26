@@ -69,8 +69,10 @@ int main(void){
 
     do{
       room_count ++;
+      char status_msg[256];
+      snprintf(status_msg, sizeof(status_msg), "You enter room %d", room_count);
       update_player_display(&player);
-      update_text_box(0, "You enter the next room", NULL, 0);
+      update_text_box(0, status_msg, NULL, 0);
       room_choice = arc4random_uniform(NUM_CHOICE);
       switch(room_choice){
         case 0: // Loot room
@@ -89,11 +91,15 @@ int main(void){
     }while(player.cur_hp > 0);
 
     //Player is dead. Ready for a new run
-    printf("You died after visiting %d rooms\n", room_count);
+    char death_msg[256];
+    snprintf(death_msg, sizeof(death_msg), "You died after visiting %d rooms", room_count);
+    update_text_box(0, death_msg, NULL, 0);
     // Leveling part and waiting for the user to press Enter
     level_up(&player, room_count);
-    printf("You will get reborn at level %d\nPress Enter when ready...\n", player.level);
-    getchar();
+    char level_up_msg[256];
+    snprintf(level_up_msg, sizeof(level_up_msg), "You will get reborn at level %d\nPress Enter when ready...\n", player.level);
+    update_text_box(0, level_up_msg, NULL, 0);
+    getch();
   }
 
   endwin(); // ncurses ends

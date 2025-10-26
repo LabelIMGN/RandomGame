@@ -42,6 +42,7 @@ void update_player_display(character_t *player){
   printw("Display stat: %d\nStat spacing: %d\n", NUM_DISPLAY_STATS, STAT_V_SPACING_MULT);
   getch();
   #endif
+
   clear();
   refresh();
 
@@ -81,13 +82,13 @@ void update_player_display(character_t *player){
   // stat names display
   for(i = 0; i < NUM_BATTLE_STATS; i++){
   wattron(stat_box, COLOR_PAIR(i+1));
-  mvwprintw(stat_box, res_box_height + 3 + STAT_V_SPACING_MULT*i, BOX_INT_H_PADDING,
+  mvwprintw(stat_box, res_box_height + 3 + STAT_V_SPACING_MULT*i, BOX_INT_H_PADDING + 1,
             "%s: %d", player_stat_names[i], player->battle_stat[i]);
   wattroff(stat_box, COLOR_PAIR(i+1));
   }
   wrefresh(stat_box);
   wrefresh(resources_box);
-  getch();
+  // getch();
 
   delwin(resources_box);
   delwin(stat_box);
@@ -125,13 +126,20 @@ void update_text_box(int room_type, char *event, char *outcome, int damages){
       msg_count = 0;
       mvwprintw(word_wrap_window, msg_count*TEXT_SPACING, 0, event);
       msg_count ++;
+      wrefresh(word_wrap_window);
+      wrefresh(text_box);
       break;
     case 1: // Loot room
-      printw("Loot room placeholder");
+      mvwprintw(word_wrap_window, msg_count*TEXT_SPACING, 0, event);
+      msg_count ++;
+      wrefresh(word_wrap_window);
+      wrefresh(text_box);
       break;
     case 2: // Event room
       mvwprintw(word_wrap_window, msg_count*TEXT_SPACING, 0, event);
       msg_count ++;
+      wrefresh(word_wrap_window);
+      wrefresh(text_box);
       if(damages == -1 && outcome != NULL){ // Positive outcome
         mvwprintw(word_wrap_window, msg_count*TEXT_SPACING, 0, outcome);
       }
@@ -140,17 +148,28 @@ void update_text_box(int room_type, char *event, char *outcome, int damages){
           mvwprintw(word_wrap_window, msg_count*TEXT_SPACING, 0, outcome);
         }
         msg_count ++;
+        wrefresh(word_wrap_window);
+        wrefresh(text_box);
         mvwprintw(word_wrap_window, msg_count*TEXT_SPACING , 0, "You loose %d HP", damages);
       }
       break;
     case 3: // Battle room
+      mvwprintw(word_wrap_window, msg_count*TEXT_SPACING, 0, event);
+      msg_count ++;
+      wrefresh(word_wrap_window);
+      wrefresh(text_box);
+      napms(GAME_SPEED);
+      mvwprintw(word_wrap_window, msg_count*TEXT_SPACING, 0, outcome);
+      wrefresh(word_wrap_window);
+      wrefresh(text_box);
       break;
   }
 
   wborder(text_box, left, right, top, bottom, tlc, trc, blc, brc);
   wrefresh(word_wrap_window);
   wrefresh(text_box);
-  getch();
+  // getch();
+  napms(GAME_SPEED);
 }
 
 void cleanup_text_box(void){

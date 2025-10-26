@@ -25,11 +25,12 @@ void process_encounters(character_t *player, int room_count){
   int player_battle_stats[NUM_BATTLE_STATS] = {player->str, player->dex, player->mag, player->fth};
   int enemy_battle_stats[NUM_BATTLE_STATS] = {enemy.str, enemy.dex, enemy.mag, enemy.fth};
 
-  printf("You encounter a level %d %s\n", enemy.level, enemy.name);
-  napms(1000); // Placeholder
+  char enemy_msg[256];
+  snprintf(enemy_msg, sizeof(enemy_msg), "You encounter a level %d %s", enemy.level, enemy.name);
 
   #ifdef DEBUG
-  printw("Enemy stats:\nLevel: %d\nstr: %d\ndex: %d\nmag: %d\nfth: %d\n", enemy.level, enemy.str, enemy.dex, enemy.mag, enemy.fth);
+  printw("Enemy stats:\nLevel: %d\nstr: %d\ndex: %d\nmag: %d\nfth: %d\n", 
+         enemy.level, enemy.str, enemy.dex, enemy.mag, enemy.fth);
   #endif
 
   for(int i = 0; i < NUM_BATTLE_STATS; i++){
@@ -43,12 +44,15 @@ void process_encounters(character_t *player, int room_count){
   getch();
   #endif
 
+  char outcome_msg[256];
   if(enemy_score > 0){
     player->cur_hp -= enemy_score + enemy.level / 2;
-    printf("You fight it and take %d damage\n", enemy_score + enemy.level / 2);
+    snprintf(outcome_msg, sizeof(outcome_msg), "You fight it and take %d damage", enemy_score + enemy.level / 2);
   }else{
-    printf("You easily beat it\n");
+    snprintf(outcome_msg, sizeof(outcome_msg), "You easily beat it");
   }
+
+  update_text_box(3, enemy_msg, outcome_msg, 0);
 
 }
 
@@ -173,10 +177,13 @@ void loot_room(character_t *player){
       }
     break;
     default:
-    printf("No potion was found...");
+    printw("No potion was found...");
     break;
   }
 
-  printf("You found a %s %s potion\n", potion.size, potion.type);
+  char message[256];
+  snprintf(message, sizeof(message), "You found a %s %s potion", potion.size,potion.type);
+  update_text_box(1, message, NULL, 0);
+  // printf("You found a %s %s potion\n", potion.size, potion.type);
 
 }
